@@ -7,6 +7,10 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
 
+
+
+
+
 class ChatGUI(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -16,15 +20,16 @@ class ChatGUI(ctk.CTk):
         self.resizable(False, False)
 
         self.chat_box = ctk.CTkTextbox(self, width=600, height=600, font=("Helvetica",18))
-        self.chat_box.grid(row=0, column=0, columnspan=2)
+        self.chat_box.grid(row=0, column=0, columnspan=2, padx=(10,10), pady=(10,0))
+        self.chat_box.insert(ctk.END, "Welcome! Enter a prompt to continue...\r\n")
 
-        self.entry = ctk.CTkEntry(self, width=510, font=("Helvetica",18))
-        self.entry.grid(row=1, column=0)
+        self.entry = ctk.CTkEntry(self, height=40, width=510, font=("Helvetica",18), placeholder_text="Enter your prompt...")
+        self.entry.grid(row=1, column=0, padx=(10,10), pady=(10,10))
         self.bind('<Return>', self.handle_generate)
 
-        self.button = ctk.CTkButton(self, text="Generate", width=50)
+        self.button = ctk.CTkButton(self, text="Generate", font=("Helvetica", 14), width=50)
         self.button.bind('<Button-1>', self.handle_generate)
-        self.button.grid(row=1, column=1)
+        self.button.grid(row=1, column=1, padx=(0,10))
 
 
     def generate_response(self, prompt):
@@ -44,12 +49,13 @@ class ChatGUI(ctk.CTk):
             chatbot_response = self.generate_response(user_input)
             self.MESSAGES.append({"role": "assistant", "content": chatbot_response})
             self.entry.delete(0, ctk.END)
-            self.chat_box.insert(ctk.END, "You:\r\n\t" + user_input + "\r\n")
-            self.chat_box.insert(ctk.END, "ChatGPT:\r\n\t" + chatbot_response + "\r\n")
+            self.chat_box.insert(ctk.END, "You:\t" + user_input + "\r\n\r\n")
+            self.chat_box.insert(ctk.END, "GPT:\t" + chatbot_response + "\r\n\r\n")
 
 
 
 if __name__ == "__main__":
     chat = ChatGUI()
     chat.mainloop()
+
 
